@@ -1,0 +1,5 @@
+linksammlung
+#
+Entprellung:
+
+https://www.mikrocontroller.net/articles/Entprellung
