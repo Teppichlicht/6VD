@@ -50,7 +50,7 @@ ISR(TIMER0_OVF_vect)				//every 10ms
 	
 	key_state ^= i;				// toggle debounced state
 	
-	key_press = key_state & i;	//0->1 kepress detected
+	key_press |= key_state & i;	//0->1 kepress detected		//BIG FAT ERROR!
 	
 	
 	//repeat function
