@@ -1,4 +1,4 @@
-/* Hardware-pwm mit Timer1 
+/* Hardware-pwm mit Timer1
 */
 
 #include <stdint.h>
@@ -28,22 +28,22 @@ uint8_t pwm_Init (void)
 	TCCR1B |= 0x01; // prescale div 1
 	
 	return(0);
-		
-} /*pwm_Init*/
+	
+	} /*pwm_Init*/
 
 
-uint8_t pwm_Set(uint8_t ch, uint16_t val)
-{
-	switch(ch)
+	uint8_t pwm_Set(uint8_t ch, uint16_t val)
 	{
-		case 0 : OCR1A = val;
-		break;
+		switch(ch)
+		{
+			case 0 : OCR1A = val;
+			break;
+			
+			case 1 : OCR1B = val;
+			break;
+		}
 		
-		case 1 : OCR1B = val;
-		break;
-	}
-	
-	return (0);
-	
-} /*pwm_Set*/
+		return (0);
+		
+		} /*pwm_Set*/
 
