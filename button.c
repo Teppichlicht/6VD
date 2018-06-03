@@ -1,4 +1,4 @@
-/*Buttons.c */
+/*Button.c */
 
 /* includes */
 
@@ -20,12 +20,12 @@
 
 #define KEY_PIN		PINF
 
-#define KEY0		0
-#define KEY1		1
-#define KEY2		2
-#define ALL_KEYS	(1 << KEY0| 1 << KEY1 | 1 << KEY2)
+#define KEY_DOWN		5
+#define KEY_MENU		6
+#define KEY_UP			7
+#define ALL_KEYS	(1 << KEY_DOWN| 1 << KEY_MENU | 1 << KEY_UP)
 
-#define REPEAT_MASK (1 << KEY1 | 1 << KEY2)
+#define REPEAT_MASK (1 << KEY_MENU)
 
 #define REPEAT_START		50		// after 500ms
 #define REPEAT_NEXT			20		//every 200ms
@@ -56,9 +56,9 @@ ISR(TIMER0_OVF_vect)				//every 10ms
 	//repeat function
 	
 	if ((key_state & REPEAT_MASK) == 0)		//check repeat function
-			
-			rpt=REPEAT_START;				//start delay
-			
+	
+	rpt=REPEAT_START;				//start delay
+	
 	if (--rpt == 0)
 	{
 		rpt=REPEAT_NEXT;					//repeat delay
@@ -69,38 +69,49 @@ ISR(TIMER0_OVF_vect)				//every 10ms
 	
 	
 	
-}	/*ISR(TIMER0_OVF_vect	*/
+	}	/*ISR(TIMER0_OVF_vect)	*/
 
 
-uint8_t get_key_press(uint8_t key_mask)
-{
-	cli();							// read and clear atomic
-	key_mask &= key_press;			// read keys
-	key_press ^= key_mask;			// clear keys
-	
-	sei();
-	
-	return(key_mask);
-	
-}	/*get_key_press(key_mask) */
+	uint8_t get_key_press(uint8_t key_mask)
+	{
+		cli();							// read and clear atomic
+		key_mask &= key_press;			// read keys
+		key_press ^= key_mask;			// clear keys
+		
+		sei();
+		
+		return(key_mask);
+		
+		}	/*get_key_press(key_mask) */
 
 
-uint8_t get_key_rpt (uint8_t key_mask)
-{
-	cli();							//read and clear atomic
-	key_mask &= key_rpt;			//read keys
-	key_rpt ^= key_mask;			//clear keys
-	sei();
-	
-	return(key_mask);
-	
-}	/* get_key_rpt(key_mask) */
+		uint8_t get_key_rpt (uint8_t key_mask)
+		{
+			cli();							//read and clear atomic
+			key_mask &= key_rpt;			//read keys
+			key_rpt ^= key_mask;			//clear keys
+			sei();
+			
+			return(key_mask);
+			
+			}	/* get_key_rpt(key_mask) */
 
-uint8_t get_key_state( uint8_t key_mask)
-{
-	key_mask &= key_state;
-	
-	return(key_mask)
-	
-}	/*get_key_state(key_mask)
+			uint8_t get_key_state( uint8_t key_mask)
+			{
+				key_mask &= key_state;
+				
+				return(key_mask)
+				
+				}	/*get_key_state(key_mask) */
 
+				uint8_t get_key_short( uint8_t key_mask )
+				{
+					cli();
+					return get_key_press( ~key_state & key_mask );
+					}	/* get_key_short (key_mask)*/
+
+
+					uint8_t get_key_long( uint8_t key_mask )
+					{
+						return get_key_press( get_key_rpt( key_mask ));
+						}/*get_key_long(key_mask)*/
